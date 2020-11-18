@@ -26,6 +26,7 @@ RegisterCommand("callsign", function(source, args)
     if xPlayer and (xPlayer.job.name == 'police' or xPlayer.job.name == 'offpolice') and args[1] then
         CallSigns[xPlayer.getIdentifier()] = args[1]
         SaveResourceFile(GetCurrentResourceName(), "callsigns.json", json.encode(CallSigns))
+        TriggerEvent("nv:officers:refresh")
     end
 end)
 
