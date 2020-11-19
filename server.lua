@@ -53,6 +53,20 @@ RegisterCommand("plist", function(source, args)
     end
 end)
 
+AddEventHandler("playerDropped", function(dropReason)
+    identifiers = GetPlayerIdentifiers(source)
+    local identifier = ""
+    for _, i in ipairs(identifiers) do
+        if string.find(i, IdentifierPrefixes[Config.IdentifierType]) then
+            identifier = i
+            break
+        end
+    end
+    Tracked[identifier] = nil
+    CallSigns[identifier] = nil
+    TriggerEvent("nv:officers:refresh")
+end)
+
 RegisterCommand("callsign", function(source, args)
     if Config.ESX then
         local src = source
@@ -159,8 +173,8 @@ RegisterCommand("callsign", function(source, args)
         end
         identifiers = GetPlayerIdentifiers(source)
         local identifier = ""
-        for i in ipairs(identifiers) do
-            if string.match(i, IdentifierPrefixes[Config.IdentifierType]) then
+        for _, i in ipairs(identifiers) do
+            if string.find(i, IdentifierPrefixes[Config.IdentifierType]) then
                 identifier = i
                 break
             end
@@ -170,8 +184,10 @@ RegisterCommand("callsign", function(source, args)
             CallSigns[identifier] = {}
             CallSigns[identifier]["CallSign"] = args[1]
             CallSigns[identifier]["Rank"] = args[4]
+            TriggerEvent("nv:officers:refresh")
         else
             CallSigns[identifier] = args[1]
+            TriggerEvent("nv:officers:refresh")
         end
     end
 end)
